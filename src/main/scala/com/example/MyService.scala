@@ -17,23 +17,20 @@ class MyServiceActor extends Actor with MyService {
   // this actor only runs our route, but you could add
   // other things here, like request stream processing
   // or timeout handling
-  def receive = runRoute(myRoute)
+  def receive = runRoute(testRoute)
 }
 
+case class User(name: String)
 
 // this trait defines our service behavior independently from the service actor
 trait MyService extends HttpService {
 
-  val myRoute =
-    path("") {
+  val testRoute =
+    path("test") {
       get {
-        respondWithMediaType(`text/html`) { // XML is marshalled to `text/xml` by default, so we simply override here
+        respondWithMediaType(`application/json`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete {
-            <html>
-              <body>
-                <h1>Say hello to <i>spray-routing</i> on <i>spray-can</i>!</h1>
-              </body>
-            </html>
+            "abc"
           }
         }
       }
