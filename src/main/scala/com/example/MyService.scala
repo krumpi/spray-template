@@ -3,7 +3,9 @@ package com.example
 import akka.actor.Actor
 import spray.routing._
 import spray.http._
+import spray.json._
 import MediaTypes._
+import spray.httpx.SprayJsonSupport
 
 
 // we don't implement our route structure directly in the service actor because
@@ -22,15 +24,20 @@ class MyServiceActor extends Actor with MyService {
 
 case class User(name: String)
 
+object JsonProtocol extends DefaultJsonProtocol {
+  implicit val userFormat = jsonFormat1(User)
+}
+
 // this trait defines our service behavior independently from the service actor
-trait MyService extends HttpService {
+trait MyService extends HttpService with SprayJsonSupport {
+  import JsonProtocol._
 
   val testRoute =
     path("test") {
       get {
         respondWithMediaType(`application/json`) { // XML is marshalled to `text/xml` by default, so we simply override here
           complete {
-            "abc"
+            User("abc")
           }
         }
       }
