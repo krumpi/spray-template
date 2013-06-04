@@ -1,4 +1,10 @@
-organization  := "com.example"
+import com.twitter.sbt._
+
+seq(StandardProject.newSettings: _*)
+
+packageDistZipName := "venolve-server.zip"
+
+organization  := "venolve"
 
 version       := "0.1"
 
